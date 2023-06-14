@@ -78,8 +78,18 @@ buttons_operator.forEach(button => button.addEventListener('click', function() {
     }
 }))
 
-
 const button_clear = document.querySelector('.clear');
 button_clear.addEventListener('click', function() {
     display.textContent = '';
+})
+
+const button_backspace = document.querySelector('.backspace');
+button_backspace.addEventListener('click', function() {
+    current_display = display.textContent;
+    current_display = current_display.split(' ');
+
+    if (current_display.pop() === '') current_display.pop();
+    current_display = current_display.join(' ');
+    
+    display.textContent = current_display;
 })
