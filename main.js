@@ -1,16 +1,16 @@
-function add(num1, num2=0) {
+function add(num1, num2) {
     return num1 + num2;
 }
 
-function subtract(num1, num2=0) {
+function subtract(num1, num2) {
     return num1 - num2;
 }
 
-function multiply(num1, num2=1) {
+function multiply(num1, num2) {
     return num1*num2;
 }
 
-function divide(num1, num2=1) {
+function divide(num1, num2) {
     return num1/num2;
 }
 
@@ -36,6 +36,12 @@ function calculate(full_operation) {
         let num1 = parseFloat(full_operation[i-1]);
         let num2 = parseFloat(full_operation[i+1]);
         let operator = full_operation[i];
+
+        if (operator === '/' && num2 === 0) {
+            alert('Ah, the infamous "Divide by Zero" error! You\'ve stumbled upon the forbidden realm where numbers shudder in fear and mathematicians weep uncontrollably. It\'s a mathematical no-man\'s-land where chaos reigns supreme. Please choose a different path, one that leads to actual solutions and prevents the universe from facepalming in disappointment.')
+            full_operation[0] = '';
+            break;
+        }
 
         full_operation.shift()
         full_operation.shift()
@@ -65,16 +71,18 @@ const operators = ['+', '-', '*', '/'];
 const buttons_operator = document.querySelectorAll('.operator');
 buttons_operator.forEach(button => button.addEventListener('click', function() {
     let current_display = display.textContent;
-    if (!operators.includes(current_display[current_display.length-2])) {
-        if (button.id !== '=') {
-            display.textContent += ` ${button.id} `;
-            current_display = display.textContent;
-        }
-        else {
-            processed_display = current_display.split(" ");
-            let result = calculate(processed_display);
-            display.textContent = result;
-        }
+
+    if (current_display === '') return;
+    if (operators.includes(current_display[current_display.length-2])) return;
+
+    if (button.id !== '=') {
+        display.textContent += ` ${button.id} `;
+        current_display = display.textContent;
+    }
+    else {
+        processed_display = current_display.split(" ");
+        let result = calculate(processed_display);
+        display.textContent = result;
     }
 }))
 
@@ -90,6 +98,6 @@ button_backspace.addEventListener('click', function() {
 
     if (current_display.pop() === '') current_display.pop();
     current_display = current_display.join(' ');
-    
+
     display.textContent = current_display;
 })
